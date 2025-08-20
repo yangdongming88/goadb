@@ -81,7 +81,12 @@ func parseDeviceAttributes(fields []string) map[string]string {
 }
 
 // Parses a key:val pair and returns key, val.
+// Fixed: handle cases where the pair doesn't contain a colon or has malformed format
 func parseKeyVal(pair string) (string, string) {
-	split := strings.Split(pair, ":")
+	split := strings.SplitN(pair, ":", 2) // Use SplitN to limit splits
+	if len(split) < 2 {
+		// If no colon or malformed format, return the entire string as key and empty string as value
+		return pair, ""
+	}
 	return split[0], split[1]
 }
